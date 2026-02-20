@@ -11,7 +11,7 @@ A Python backend service that receives transaction webhooks from external paymen
 
 ```bash
 # Clone the repo
-git clone <repo-url>
+git clone https://github.com/ajeethcs/Transaction-Webhook-Service
 cd confluencr-assignment
 
 # Create virtual environment
@@ -26,6 +26,14 @@ uvicorn app.main:app --reload
 ```
 
 The server starts at **http://localhost:8000**. API docs are available at **http://localhost:8000/docs**.
+
+## Technical Choices
+
+- **FastAPI**: Chosen for its high performance and native support for asynchronous programming.
+- **Asynchronous Database Access**: Using **SQLAlchemy (Async)** with `asyncpg` (for PostgreSQL) or `aiosqlite` (for local development) to ensure the database operations do not block the main event loop.
+- **Background Task Processing**: Using `asyncio.create_task` for lightweight, non-blocking background processing. This allows the service to acknowledge webhook receipts within the 500ms requirement while continuing to process the data.
+- **Pydantic**: Used for strict data validation and schema definition, ensuring only valid transaction data is accepted.
+- **Idempotency**: Implemented a check on the `transaction_id` to ensure that duplicate webhooks from the same transaction are not processed multiple times, which is critical for reliable financial processing.
 
 Set the `DATABASE_URL` environment variable:
 
@@ -83,5 +91,5 @@ curl -X POST http://localhost:8000/v1/webhooks/transactions \
 
 ## Public API Endpoint
 
-Deployed at: 
+Deployed at: https://transaction-webhook-service-e8eq.onrender.com/
 
