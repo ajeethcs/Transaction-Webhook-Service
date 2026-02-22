@@ -11,7 +11,7 @@ router = APIRouter(prefix="/v1/transactions", tags=["Transactions"])
 
 @router.get(
     "/{transaction_id}",
-    response_model=TransactionResponse,
+    response_model=list[TransactionResponse],
     summary="Get transaction status",
     description="Retrieve the current status and details of a transaction by its ID.",
 )
@@ -38,4 +38,4 @@ async def get_transaction(
             detail=f"Transaction {transaction_id} not found",
         )
 
-    return transaction
+    return [transaction]
